@@ -1,0 +1,162 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Blue Theme CSS Variables */
+:root {
+--primary-blue: #2563eb;
+--primary-blue-hover: #1d4ed8;
+--primary-blue-light: #eff6ff;
+--primary-blue-50: #f0f6ff;
+}
+
+/* Primary Button Styles */
+.primary-button {
+background-color: var(--primary-blue) !important;
+color: white !important;
+}
+
+.primary-button:hover {
+background-color: var(--primary-blue-hover) !important;
+}
+
+/* Tab Styles */
+[data-state="active"][role="tab"] {
+background-color: var(--primary-blue-50) !important;
+color: var(--primary-blue) !important;
+border-color: var(--primary-blue) !important;
+}
+
+/* Profile Image Border */
+.profile-image-border {
+border: 2px solid var(--primary-blue) !important;
+}
+
+/* Camera Icon Button */
+.camera-button {
+background-color: var(--primary-blue) !important;
+color: white !important;
+}
+
+/* Link Hover States */
+.link-hover:hover {
+background-color: var(--primary-blue-50) !important;
+}
+
+/* Active States */
+.active-state {
+color: var(--primary-blue) !important;
+background-color: var(--primary-blue-50) !important;
+}
+
+/* Border Accents */
+.border-accent {
+border-color: var(--primary-blue) !important;
+}
+
+/* Modern Black Scrollbar Styles */
+::-webkit-scrollbar {
+width: 5px;
+height: 5px;
+}
+
+::-webkit-scrollbar-track {
+background: #f1f1f1;
+border-radius: 100vh;
+}
+
+::-webkit-scrollbar-thumb {
+background: #404040;
+border-radius: 100vh;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background: #262626;
+}
+
+/* For Firefox */
+* {
+scrollbar-width: thin;
+scrollbar-color: #404040 #f1f1f1;
+}
+
+/* Add to your CSS */
+@supports (-webkit-touch-callout: none) {
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+}
+
+@layer utilities {
+  @keyframes breath {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.15);
+    }
+  }
+  .animate-breath {
+    animation: breath 1.8s ease-in-out infinite;
+  }
+  @keyframes bounce200 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-0.5rem); }
+  }
+  .animate-bounce200 {
+    animation: bounce200 1.4s infinite 0.2s;
+  }
+  @keyframes bounce400 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-0.5rem); }
+  }
+  .animate-bounce400 {
+    animation: bounce400 1.4s infinite 0.4s;
+  }
+}

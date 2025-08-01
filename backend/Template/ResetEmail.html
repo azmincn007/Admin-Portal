@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #0a1628;
+    }
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #1e40af);
+      color: white;
+      padding: 25px;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #fbbf24;
+    }
+    .content {
+      padding: 30px;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    .reset-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #1e293b;
+      padding: 15px 30px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      margin: 20px 0;
+      box-shadow: 0 4px 6px rgba(251, 191, 36, 0.3);
+      transition: all 0.3s ease;
+    }
+    .reset-button:hover {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      transform: translateY(-2px);
+    }
+    .message {
+      color: #e2e8f0;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    .warning {
+      background-color: #451a03;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      color: #fbbf24;
+      font-size: 14px;
+      border-left: 4px solid #f59e0b;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #94a3b8;
+      font-size: 13px;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+    }
+    .social-links {
+      margin: 15px 0;
+    }
+    .social-links a {
+      color: #fbbf24;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .button-container {
+      text-align: center;
+      margin: 25px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">MOOVO</div>
+      <h2 style="margin: 0; color: white;">Password Reset Request</h2>
+    </div>
+    <div class="content">
+      <p class="message">Hello {USER_NAME}!</p>
+      <p class="message">We received a request to reset your password for your Moovo account. Click the button below to create a new password:</p>
+      
+      <div class="button-container">
+        <a href="{RESET_URL}" class="reset-button">Reset Password</a>
+      </div>
+      
+      <p class="message">This link will expire in 1 hour for your security.</p>
+      
+      <div class="warning">
+        ⚠️ If you didn't request a password reset, please ignore this email and your password will remain unchanged.
+      </div>
+      
+      <p class="message">Need help? Contact our support team for assistance.</p>
+    </div>
+    <div class="footer">
+      <div class="social-links">
+        <a href="#">Facebook</a> |
+        <a href="#">Twitter</a> |
+        <a href="#">Instagram</a>
+      </div>
+      <p>This is an automated message, please do not reply.</p>
+      <p>© 2024 Moovo. All rights reserved.</p>
+      <p style="color: #64748b; font-size: 12px;">Sent with ❤️ from Moovo Team</p>
+    </div>
+  </div>
+</body>
+</html>
