@@ -31,7 +31,8 @@ app.use(cors({
     'http://localhost:8080',
     'https://moovo.netlify.app',
     'https://www.moovo.netlify.app',
-    'https://admin-portal-bw0z.onrender.com/'
+    'https://admin-portal-bw0z.onrender.com/',
+    'https://admin-portal-project.netlify.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
