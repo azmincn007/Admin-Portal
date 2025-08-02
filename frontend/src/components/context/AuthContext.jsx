@@ -113,8 +113,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('moovoRefreshToken', tokens.refreshToken);
     }
     
-    // Remove old token if it exists
-    localStorage.removeItem('moovoToken');
+    
     
     setIsLoggedIn(true);
   };
