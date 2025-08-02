@@ -4,10 +4,10 @@ const { Sequelize } = require('sequelize');
 const config = {
   development: {
     username: 'root',
-    password: '',
-    database: 'user-managment',
-    host: 'localhost',
-    port: 3306,
+    password: 'CRhbXhuqOqNGluWSubaNnjprxtGgGeRx',
+    database: 'railway',
+    host: 'centerbeam.proxy.rlwy.net',
+    port: 45053,
     dialect: 'mysql',
     logging: console.log,
   },

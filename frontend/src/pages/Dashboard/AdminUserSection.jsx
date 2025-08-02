@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Users, UserCheck, Shield, Trash2, Calendar as CalendarIcon, AlertTriangle } from 'lucide-react';
+import { Search, Users, UserCheck, Shield, Trash2, Calendar as CalendarIcon, AlertTriangle, Filter, X } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import axios from 'axios';
@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from 'sonner';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function AdminUserSection() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,8 +34,10 @@ export default function AdminUserSection() {
   const [detailedUsers, setDetailedUsers] = useState({});
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const queryClient = useQueryClient();
   const { getValidAccessToken } = useAuth();
+  const isMobile = useIsMobile();
 
   // Debounce search term
   useEffect(() => {
@@ -256,17 +259,177 @@ export default function AdminUserSection() {
     );
   };
 
-  if (isLoading) {
+  // Mobile User Card Component
+  const MobileUserCard = ({ user }) => {
+    const detailedUser = detailedUsers[user._id];
+    const isLoadingImage = !detailedUser;
+
     return (
-      <div className="space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-blue-900">Admin Portal</h1>
-            <p className="text-gray-600 mt-1">Loading users...</p>
+      <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center space-x-3 flex-1">
+            {isLoadingImage ? (
+              <Skeleton className="w-12 h-12 rounded-full" />
+            ) : detailedUser.profileImage ? (
+              <img 
+                src={detailedUser.profileImage} 
+                alt={user.name}
+                className="w-12 h-12 rounded-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center">
+                <span className="text-white font-semibold text-sm">
+                  {getInitials(user.name)}
+                </span>
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-gray-900 truncate">{user.name}</p>
+              <p className="text-sm text-gray-600 truncate">{user.email}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  user.role === 'admin' 
+                    ? 'bg-purple-100 text-purple-800' 
+                    : 'bg-blue-100 text-blue-800'
+                }`}>
+                  {user.role}
+                </span>
+                <span className="text-xs text-gray-500">{user.joinedAt}</span>
+              </div>
+            </div>
+          </div>
+          <div className="ml-2">
+            {user.role === 'admin' ? (
+              <div className="flex items-center text-gray-400">
+                <Shield className="w-4 h-4 mr-1" />
+                <span className="text-xs font-medium">Protected</span>
+              </div>
+            ) : (
+              <Button 
+                variant="destructive" 
+                size="sm" 
+                onClick={() => handleDeleteUser(user)}
+                disabled={deleteUserMutation.isPending}
+                className="text-white hover:text-white p-2"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            )}
           </div>
         </div>
+      </div>
+    );
+  };
+
+  // Mobile Filters Component
+  const MobileFilters = () => (
+    <div className={`${showMobileFilters ? 'block' : 'hidden'} md:hidden space-y-4 p-4 bg-gray-50 border-t border-gray-200`}>
+      <div className="space-y-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Input
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        
+        <Select value={roleFilter} onValueChange={setRoleFilter}>
+          <SelectTrigger>
+            <SelectValue placeholder="Filter by role" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Roles</SelectItem>
+            <SelectItem value="user">User</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+          </SelectContent>
+        </Select>
+        
+        <Select value={dateFilter} onValueChange={setDateFilter}>
+          <SelectTrigger>
+            <CalendarIcon className="w-4 h-4 mr-2" />
+            <SelectValue placeholder="Filter by join date" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Time</SelectItem>
+            <SelectItem value="today">Today</SelectItem>
+            <SelectItem value="yesterday">Yesterday</SelectItem>
+            <SelectItem value="last7days">Last 7 Days</SelectItem>
+            <SelectItem value="last30days">Last 30 Days</SelectItem>
+            <SelectItem value="last90days">Last 90 Days</SelectItem>
+            <SelectItem value="custom">Custom Date Range</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {dateFilter === 'custom' && (
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">From Date</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left font-normal">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {fromDate ? format(fromDate, "PPP") : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={fromDate}
+                    onSelect={setFromDate}
+                    disabled={(date) => date > new Date() || (toDate && date > toDate)}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">To Date</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left font-normal">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {toDate ? format(toDate, "PPP") : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={toDate}
+                    onSelect={setToDate}
+                    disabled={(date) => date > new Date() || (fromDate && date < fromDate)}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+        )}
+
+        {(debouncedSearchTerm || roleFilter !== 'all' || dateFilter !== 'all' || fromDate || toDate) && (
+          <Button
+            onClick={clearAllFilters}
+            variant="outline"
+            className="w-full"
+          >
+            Clear all filters
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4 p-4">
+        <div className="text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-blue-900">Admin Portal</h1>
+          <p className="text-gray-600 mt-1">Loading users...</p>
+        </div>
         <Card className="border-0 shadow-lg">
-          <CardContent className="p-6">
+          <CardContent className="p-4 md:p-6">
             <div className="animate-pulse space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center space-x-4">
@@ -288,12 +451,10 @@ export default function AdminUserSection() {
 
   if (error) {
     return (
-      <div className="space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-blue-900">Admin Portal</h1>
-            <p className="text-red-600 mt-1">Error loading users</p>
-          </div>
+      <div className="space-y-4 p-4">
+        <div className="text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-blue-900">Admin Portal</h1>
+          <p className="text-red-600 mt-1">Error loading users</p>
         </div>
       </div>
     );
@@ -303,24 +464,37 @@ export default function AdminUserSection() {
   const pagination = usersData?.pagination || {};
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 md:space-y-8 p-4 md:p-0">
       {/* Header with Stats */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-blue-900">Admin Portal</h1>
-          <p className="text-gray-600 mt-1">Manage and monitor all platform users</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-blue-900">Admin Portal</h1>
+          <p className="text-gray-600 mt-1 text-sm md:text-base">Manage and monitor all platform users</p>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="bg-blue-50 px-4 py-2 rounded-lg">
-            <span className="text-blue-900 font-semibold">Total Users: {pagination.totalUsers || 0}</span>
+        <div className="flex items-center justify-between md:justify-end gap-4">
+          <div className="bg-blue-50 px-3 md:px-4 py-2 rounded-lg">
+            <span className="text-blue-900 font-semibold text-sm md:text-base">
+              Total: {pagination.totalUsers || 0}
+            </span>
           </div>
+          {/* Mobile Filter Toggle */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowMobileFilters(!showMobileFilters)}
+            className="md:hidden"
+          >
+            <Filter className="w-4 h-4 mr-2" />
+            Filters
+          </Button>
         </div>
       </div>
 
       {/* Users Management */}
       <Card className="border-0 shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          {/* Desktop Filters */}
+          <div className="hidden md:flex flex-col sm:flex-row gap-4 mt-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
@@ -360,17 +534,14 @@ export default function AdminUserSection() {
             </Select>
           </div>
 
-          {/* Custom Date Range Pickers */}
+          {/* Desktop Custom Date Range */}
           {dateFilter === 'custom' && (
-            <div className="flex flex-col sm:flex-row gap-4 mt-4 pt-4 border-t border-gray-200">
+            <div className="hidden md:flex flex-col sm:flex-row gap-4 mt-4 pt-4 border-t border-gray-200">
               <div className="flex flex-col space-y-2">
                 <label className="text-sm font-medium text-gray-700">From Date</label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-[240px] justify-start text-left font-normal"
-                    >
+                    <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {fromDate ? format(fromDate, "PPP") : "Pick a date"}
                     </Button>
@@ -390,10 +561,7 @@ export default function AdminUserSection() {
                 <label className="text-sm font-medium text-gray-700">To Date</label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-[240px] justify-start text-left font-normal"
-                    >
+                    <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {toDate ? format(toDate, "PPP") : "Pick a date"}
                     </Button>
@@ -414,7 +582,7 @@ export default function AdminUserSection() {
           
           {/* Active Filters Display */}
           {(debouncedSearchTerm || roleFilter !== 'all' || dateFilter !== 'all' || fromDate || toDate) && (
-            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-200">
+            <div className="hidden md:flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-200">
               <span className="text-sm text-gray-600 font-medium">Active filters:</span>
               {debouncedSearchTerm && (
                 <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
@@ -445,8 +613,13 @@ export default function AdminUserSection() {
             </div>
           )}
         </CardHeader>
-        <CardContent className="p-6">
-          <div className="overflow-x-auto">
+
+        {/* Mobile Filters */}
+        <MobileFilters />
+
+        <CardContent className="p-4 md:p-6">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
@@ -506,9 +679,16 @@ export default function AdminUserSection() {
             </table>
           </div>
 
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {users.map((user) => (
+              <MobileUserCard key={user._id} user={user} />
+            ))}
+          </div>
+
           {users.length === 0 && !isLoading && (
             <div className="text-center py-8">
-              <p className="text-gray-500 font-medium">
+              <p className="text-gray-500 font-medium text-sm md:text-base">
                 {debouncedSearchTerm || roleFilter !== 'all' || dateFilter !== 'all' || fromDate || toDate
                   ? 'No users found matching your filters' 
                   : 'No users found'
@@ -518,28 +698,30 @@ export default function AdminUserSection() {
           )}
 
           {/* Pagination */}
-          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-            <p className="text-sm text-gray-600">
+          <div className="flex flex-col md:flex-row items-center justify-between mt-6 pt-4 border-t border-gray-200 gap-4">
+            <p className="text-xs md:text-sm text-gray-600 text-center md:text-left">
               Page {pagination.currentPage || 1} of {pagination.totalPages || 1} 
               ({pagination.totalUsers || 0} total users)
             </p>
-            <div className="flex space-x-2">
+            <div className="flex items-center space-x-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={!pagination.hasPrevPage || isLoading}
+                className="text-xs md:text-sm"
               >
                 Previous
               </Button>
-              <span className="px-3 py-1 text-sm text-gray-600">
-                Page {pagination.currentPage || 1} of {pagination.totalPages || 1}
+              <span className="px-2 md:px-3 py-1 text-xs md:text-sm text-gray-600">
+                {pagination.currentPage || 1} / {pagination.totalPages || 1}
               </span>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => prev + 1)}
                 disabled={!pagination.hasNextPage || isLoading}
+                className="text-xs md:text-sm"
               >
                 Next
               </Button>
@@ -550,7 +732,7 @@ export default function AdminUserSection() {
 
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <DialogContent className="sm:max-w-[425px] border-2 border-red-200">
+        <DialogContent className="sm:max-w-[425px] mx-4 border-2 border-red-200">
           <DialogHeader className="flex flex-row items-center gap-4">
             <div className="p-2 rounded-full bg-red-50 text-red-500">
               <AlertTriangle className="h-6 w-6" />
@@ -582,12 +764,13 @@ export default function AdminUserSection() {
             </div>
           )}
 
-          <DialogFooter className="sm:justify-end gap-2 mt-4">
+          <DialogFooter className="flex flex-col sm:flex-row sm:justify-end gap-2 mt-4">
             <Button 
               type="button" 
               variant="outline" 
               onClick={cancelDelete}
               disabled={deleteUserMutation.isPending}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
@@ -596,7 +779,7 @@ export default function AdminUserSection() {
               variant="destructive"
               onClick={confirmDeleteUser}
               disabled={deleteUserMutation.isPending}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
             >
               {deleteUserMutation.isPending ? (
                 <>
@@ -613,10 +796,5 @@ export default function AdminUserSection() {
     </div>
   );
 }
-
-
-
-
-
 
 

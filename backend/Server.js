@@ -6,6 +6,7 @@ const authRouter = require('./Router/authRouter')
 const mainRouter = require('./Router/mainRouter')
 const { connection } = require('./config/config')
 const db = require('./models')
+const { checkDatabase } = require('./Controller/Database/CheckDatabase')
 
 dotenv.config()
 
@@ -13,7 +14,7 @@ dotenv.config()
 const initializeDatabase = async () => {
   try {
     await connection()
-    await db.sequelize.sync({ force: true }) // This will drop and recreate tables
+    await db.sequelize.sync({ alter: true }) // This will create/update tables
     console.log('Database synchronized successfully')
   } catch (error) {
     console.error('Database initialization failed:', error)
@@ -38,6 +39,9 @@ app.use(cors({
 }))
 
 app.use(express.json({ limit: '10mb' }))
+
+// Database check route
+app.get('/api/check-database', checkDatabase)
 
 app.use('/api/auth', authRouter)
 app.use('/api/adminportal', mainRouter)

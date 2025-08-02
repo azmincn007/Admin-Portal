@@ -232,8 +232,12 @@ export default function AuthForm() {
                     {...register("password", {
                       required: "Password is required",
                       minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters"
+                        value: 8,
+                        message: "Password must be at least 8 characters"
+                      },
+                      pattern: {
+                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                        message: "Password must contain at least one uppercase letter, one lowercase letter, and one number"
                       }
                     })}
                     className="w-full px-4 py-2.5 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"

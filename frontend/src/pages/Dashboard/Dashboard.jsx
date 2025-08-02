@@ -125,7 +125,7 @@ export default function Dashboard() {
 
           {/* Main Content */}
           <main className="flex-1 lg:ml-0">
-            <div className="p-6">
+            <div className="md:p-6">
               {activeSection === 'overview' && <AdminDashboard />}
               {activeSection === 'users' && <AdminUserSection />}
             </div>
