@@ -1,13 +1,12 @@
 
-import welcome from './welcome.jpg';
-import welcome2 from './welcome2.png';
+import welcome from './welcome.webp';
 
 
 
 export default {
 
 
-  welcome,welcome2,
+  welcome,
  
   
 
