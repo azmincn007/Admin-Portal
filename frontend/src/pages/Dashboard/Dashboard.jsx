@@ -15,7 +15,13 @@ export default function Dashboard() {
   const [activeSection, setActiveSection] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
+  // Check for access token and navigate to login if not found
+  useEffect(() => {
+    const accessToken = localStorage.getItem('moovoAccessToken');
+    if (!accessToken) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   // Show loading spinner while checking authentication or fetching user data
   if (isLoading) {
@@ -27,12 +33,6 @@ export default function Dashboard() {
         </div>
       </div>
     );
-  }
-
-  // Check authentication again before rendering
-  if (!isLoggedIn) {
-    navigate('/login');
-    return null;
   }
 
   // If no user data yet, show loading
