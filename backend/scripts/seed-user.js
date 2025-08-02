@@ -19,9 +19,6 @@ const seedUsers = async () => {
     const existingAdmin = await User.findOne({ where: { email: adminData.email } });
     if (!existingAdmin) {
       const admin = await User.create(adminData);
-      console.log(`Admin created: ${admin.name} (${admin.email})`);
-    } else {
-      console.log(`Admin already exists: ${adminData.email}`);
     }
 
     // Generate dynamic timestamps
@@ -91,28 +88,10 @@ const seedUsers = async () => {
       updateOnDuplicate: ['name', 'password', 'profileImage', 'createdAt', 'updatedAt']
     });
 
-    console.log(`Successfully seeded ${createdUsers.length} dummy users`);
-    
-    // Show distribution of created users
-    const last24h = users.filter(u => new Date(u.createdAt) > new Date(now - 24 * 60 * 60 * 1000)).length;
-    const last48h = users.filter(u => new Date(u.createdAt) > new Date(now - 48 * 60 * 60 * 1000)).length;
-    const lastWeek = users.filter(u => new Date(u.createdAt) > new Date(now - 7 * 24 * 60 * 60 * 1000)).length;
-    const lastMonth = users.filter(u => new Date(u.createdAt) > new Date(now - 30 * 24 * 60 * 60 * 1000)).length;
-    
-    console.log('\n📊 User Distribution:');
-    console.log(`Last 24 hours: ${last24h} users`);
-    console.log(`Last 48 hours: ${last48h} users`);
-    console.log(`Last week: ${lastWeek} users`);
-    console.log(`Last month: ${lastMonth} users`);
-    console.log(`Older than month: ${users.length - lastMonth} users`);
-    
-    console.log('\n🔐 Default password for all users: Password123');
-    console.log('👤 Admin email: admin@gmail.com');
-    console.log('✅ Seeding completed!');
+
     
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding users:', error);
     process.exit(1);
   }
 };

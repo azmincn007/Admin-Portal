@@ -127,7 +127,6 @@ const getAllUsers = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching all users:', error);
         res.status(500).json({
             success: false,
             message: 'Error fetching all users',

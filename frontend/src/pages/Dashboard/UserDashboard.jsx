@@ -15,7 +15,6 @@ import axios from 'axios';
 
 export default function UserDashboard() {
   const { user, isLoading } = useUser();
-  console.log(user);
   
   const { getValidAccessToken } = useAuth();
   const queryClient = useQueryClient();

@@ -24,7 +24,6 @@ export default function AdminDashboard({ onNavigateToUsers }) {
           Authorization: `Bearer ${accessToken}`
         }
       });
-      console.log('Analytics response:', response.data);
       return response.data.analytics;
     },
     retry: false,
@@ -46,7 +45,6 @@ export default function AdminDashboard({ onNavigateToUsers }) {
           Authorization: `Bearer ${accessToken}`
         }
       });
-      console.log('Recent users response:', response.data);
       return response.data.recentUsers;
     },
     retry: false,

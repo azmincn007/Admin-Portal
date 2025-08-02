@@ -37,7 +37,6 @@ const verifyOTP = async ({ email, otp }) => {
   }
 
   const data = await response.json();
-  console.log(data);
   
   return data;
 };
@@ -110,11 +109,6 @@ export default function VerifyOTP() {
   const { mutate: verifyOTPMutation, isPending: isVerifying } = useMutation({
     mutationFn: verifyOTP,
     onSuccess: (data) => {
-      console.log('Verify OTP Success - Full response:', data);
-      console.log('Access Token received:', data.accessToken);
-      console.log('Refresh Token received:', data.refreshToken);
-      console.log('Is new user:', data.isNewUser);
-      
       // Save tokens using the new login method
       if (data.accessToken && data.refreshToken) {
         login({

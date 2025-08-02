@@ -1,6 +1,5 @@
 const { body, validationResult } = require('express-validator');
 
-// Common validation rules
 const emailValidation = body('email')
   .isEmail()
   .withMessage('Please provide a valid email address')
@@ -20,7 +19,7 @@ const nameValidation = body('name')
   .withMessage('Name must be between 2 and 50 characters')
   .matches(/^[a-zA-Z\s]+$/)
   .withMessage('Name can only contain letters and spaces')
-  .escape(); // Prevents XSS
+  .escape();
 
 const otpValidation = body('otp')
   .isLength({ min: 6, max: 6 })
@@ -36,7 +35,6 @@ const tokenValidation = body('token')
   .withMessage('Invalid token format')
   .trim();
 
-// Validation result handler
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

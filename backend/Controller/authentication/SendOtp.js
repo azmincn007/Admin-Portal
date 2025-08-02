@@ -41,7 +41,7 @@ const sendOTP = async (req, res) => {
         role: 'user'
       });
       
-      console.log(`Created new user with ID: ${user.id}, Name: ${emailName}, Email: ${email}`);
+
     } else {
       // Verify password for existing user
       const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -84,7 +84,6 @@ const sendOTP = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error sending OTP:', error);
     res.status(500).json({
       success: false,
       message: 'Error sending OTP',

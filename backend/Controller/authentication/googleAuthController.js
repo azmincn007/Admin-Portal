@@ -22,7 +22,6 @@ const authController = {
 
       // Check if user exists (Sequelize syntax)
       let user = await User.findOne({ where: { email } });
-      console.log(user);
 
       // If user doesn't exist, create new user
       if (!user) {
@@ -57,7 +56,6 @@ const authController = {
       });
 
     } catch (error) {
-      console.error('Google Auth Error:', error);
       res.status(500).json({
         success: false,
         message: 'Authentication failed'

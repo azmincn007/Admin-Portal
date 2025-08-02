@@ -4,7 +4,6 @@ const { authMiddleware } = require('../Middleware/AuthMiddleware');
 const { body, query } = require('express-validator');
 const { handleValidationErrors, nameValidation, emailValidation } = require('../Middleware/ValidationMiddleware');
 
-// Import your controllers
 const { getUserAccount } = require('../Controller/User/Get-Account');
 const { getUserAnalytics } = require("../Controller/User/Admin/Get-Analytics");
 const { getRecentUsers, getAllUsers } = require('../Controller/User/Admin/Get-RecentUsers');
@@ -13,13 +12,10 @@ const { adminMiddleware } = require('../Middleware/AdminMiddleware');
 const { updateUserProfile } = require('../Controller/User/Update-Profile');
 const uploadProfileImage = require('../Middleware/ProfileImageMiddleware');
 
-// Get user account route
 router.get('/user-details', authMiddleware, getUserAccount);
 
-// User analytics route (admin only)
 router.get('/user-analytics', authMiddleware, getUserAnalytics);
 
-// Get users with pagination validation
 router.get('/recent-users', 
   authMiddleware,
   [
@@ -35,7 +31,7 @@ router.get('/all-users',
   [
     query('page').optional().isInt({ min: 1 }),
     query('limit').optional().isInt({ min: 1, max: 100 }),
-    query('loadType').optional().isIn(['basic', 'detailed']), // NEW: Add loadType validation
+    query('loadType').optional().isIn(['basic', 'detailed']),
     handleValidationErrors
   ],
   getAllUsers
@@ -52,7 +48,7 @@ router.delete('/delete-user',
 
 router.put('/update-profile', 
   authMiddleware,
-  uploadProfileImage('profileImage'), // Handle image upload
+  uploadProfileImage('profileImage'),
   [
     body('name').optional().isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters'),
     handleValidationErrors

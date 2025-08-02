@@ -37,7 +37,6 @@ const getUserAnalytics = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching user analytics:', error);
         res.status(500).json({
             success: false,
             message: 'Error fetching user analytics',

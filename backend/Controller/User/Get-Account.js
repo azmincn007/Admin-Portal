@@ -45,7 +45,6 @@ const getUserAccount = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error getting user account:', error);
         res.status(500).json({
             success: false,
             message: 'Error retrieving user account',

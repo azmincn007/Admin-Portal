@@ -76,7 +76,6 @@ const deleteAccount = async (req, res) => {
 
   } catch (error) {
     await session.abortTransaction();
-    console.error('Error deleting account:', error);
     res.status(500).json({
       success: false,
       message: 'Error deleting account',

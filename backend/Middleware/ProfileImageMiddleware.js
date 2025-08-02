@@ -3,12 +3,11 @@ const sharp = require('sharp');
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const r2Client = require('../config/r2config');
 
-// Use memory storage for multer
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024
   }
 });
 
@@ -27,16 +26,14 @@ const uploadToR2 = async (buffer, fileName, contentType) => {
       key: fileName
     };
   } catch (error) {
-    console.error('R2 upload error:', error);
     throw new Error(`R2 upload failed: ${error.message}`);
   }
 };
 
 const processProfileImage = async (file) => {
   try {
-    // Process image with sharp
     const processedBuffer = await sharp(file.buffer)
-      .resize(400, 400, { // Resize to standard profile image size
+      .resize(400, 400, {
         fit: 'cover',
         position: 'center'
       })
@@ -98,7 +95,6 @@ const uploadProfileImage = (fieldName) => {
         
         next();
       } catch (error) {
-        console.error('Profile image processing error:', error);
         res.status(500).json({ error: 'Failed to process and upload profile image' });
       }
     }

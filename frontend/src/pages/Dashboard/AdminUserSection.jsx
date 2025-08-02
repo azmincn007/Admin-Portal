@@ -109,7 +109,6 @@ export default function AdminUserSection() {
           Authorization: `Bearer ${accessToken}`
         }
       });
-      console.log('Basic users response:', response.data);
       return response.data;
     },
     retry: false,

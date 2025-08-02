@@ -48,7 +48,6 @@ const getRecentUsers = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching recent users:', error);
         res.status(500).json({
             success: false,
             message: 'Error fetching recent users',

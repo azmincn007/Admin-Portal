@@ -54,7 +54,6 @@ const sendResetLink = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error sending reset link:', error);
     res.status(500).json({
       success: false,
       message: 'Error sending reset link',
@@ -69,7 +68,6 @@ const sendResetLink = async (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
-console.log(token + " " + newPassword);
 
     // Validate inputs
     if (!token || !newPassword) {
@@ -154,7 +152,6 @@ console.log(token + " " + newPassword);
     });
 
   } catch (error) {
-    console.error('Error resetting password:', error);
     res.status(500).json({
       success: false,
       message: 'Error resetting password',

@@ -31,7 +31,7 @@ const checkDatabase = async (req, res) => {
       });
       
     } catch (error) {
-      console.log('Users table not found or error:', error.message);
+      // Users table not found or error
     }
     
     res.status(200).json({
@@ -49,7 +49,6 @@ const checkDatabase = async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Database check error:', error);
     res.status(500).json({
       success: false,
       message: 'Database check failed',

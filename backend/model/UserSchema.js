@@ -4,7 +4,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define associations here
     }
   }
   
@@ -38,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
     googleId: {
       type: DataTypes.STRING,
       allowNull: true
-      // Removed unique: true to reduce index count
     },
   
   }, {
