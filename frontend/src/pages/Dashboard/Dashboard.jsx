@@ -29,7 +29,6 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-900"></div>
-          <p className="text-gray-600 font-medium">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -41,7 +40,6 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-900"></div>
-          <p className="text-gray-600 font-medium">Loading user data...</p>
         </div>
       </div>
     );

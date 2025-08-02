@@ -425,22 +425,11 @@ export default function AdminUserSection() {
       <div className="space-y-4 p-4">
         <div className="text-center">
           <h1 className="text-2xl md:text-3xl font-bold text-blue-900">Admin Portal</h1>
-          <p className="text-gray-600 mt-1">Loading users...</p>
         </div>
         <Card className="border-0 shadow-lg">
           <CardContent className="p-4 md:p-6">
-            <div className="animate-pulse space-y-4">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex items-center space-x-4">
-                  <Skeleton className="h-10 w-10 rounded-full" />
-                  <div className="space-y-2 flex-1">
-                    <Skeleton className="h-4 w-[200px]" />
-                    <Skeleton className="h-3 w-[150px]" />
-                  </div>
-                  <Skeleton className="h-6 w-16 rounded-full" />
-                  <Skeleton className="h-8 w-8" />
-                </div>
-              ))}
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-900"></div>
             </div>
           </CardContent>
         </Card>

@@ -97,20 +97,10 @@ export default function AdminDashboard({ onNavigateToUsers }) {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">
               Dashboard Overview
             </h1>
-            <p className="text-gray-600 mt-1">Loading analytics...</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-              <CardContent className="p-4">
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                  <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-900"></div>
         </div>
       </div>
     );

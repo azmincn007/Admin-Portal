@@ -306,8 +306,9 @@ export default function AuthForm() {
                   {!isGoogleScriptLoaded && (
                     <Button 
                       disabled
-                      className="w-full py-2.5 rounded-lg border border-gray-300 bg-white text-gray-500"
+                      className="w-full py-2.5 rounded-lg border border-gray-300 bg-white text-gray-500 flex items-center justify-center"
                     >
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500 mr-2"></div>
                       Loading Google Sign-In...
                     </Button>
                   )}
@@ -331,8 +332,9 @@ export default function AuthForm() {
                   {!isGoogleScriptLoaded && (
                     <Button 
                       disabled
-                      className="w-full py-2.5 rounded-lg border border-gray-300 bg-white text-gray-500"
+                      className="w-full py-2.5 rounded-lg border border-gray-300 bg-white text-gray-500 flex items-center justify-center"
                     >
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500 mr-2"></div>
                       Loading Google Sign-In...
                     </Button>
                   )}
